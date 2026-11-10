@@ -59,19 +59,30 @@ jobs:
           have="$(gh api "repos/$GITHUB_REPOSITORY/releases" --paginate \
             | jq -r '.[].tag_name' | grep '^hermes-desktop-v' || true)"
 
-          # The newest tag without an artifact: the cask's livecheck and the
-          # FlatPark resolver both consume the latest build only, so older
-          # missing tags are not worth building. One per run; if a build
-          # fails, the next run retries the same tag.
+          # The tags to build are the genuinely new ones: upstream stable tags
+          # newer than the newest tag already published here (in the releases
+          # API's order, so the year-form tags upstream retired sort out
+          # naturally), oldest first, at most 5 per run. Historical gaps below
+          # the newest published artifact are never built: nothing consumes
+          # them — the cask's livecheck and the FlatPark resolver both take the
+          # latest build. jq binds each tag before index(): function arguments
+          # close over the current input, and the input there is the have-list.
           tags="$(gh api "repos/$UPSTREAM/releases?per_page=30" \
             | jq -r --arg have "$have" '
                 [.[]
                  | select(.draft == false and .prerelease == false)
                  | select(.tag_name | test("^v[0-9]+\\.[0-9]+\\.[0-9]+$"))
-                 | .tag_name as $t
-                 | select((($have | split("\n")) | index("hermes-desktop-" + $t)) == null)
-                 | $t]
-                | .[0:1]
+                 | .tag_name]
+                | . as $stable
+                | ($stable | length) as $n
+                | ([range(0; $n)]
+                   | map(select(($stable[.] as $t | ($have | split("\n")) | index("hermes-desktop-" + $t)) != null))
+                   | .[0]) as $ai
+                | if $ai == null then [$stable[0]]
+                  else ([range(0; $ai)] | map($stable[.])
+                        | map(. as $t2 | select((($have | split("\n")) | index("hermes-desktop-" + $t2)) == null) | $t2)
+                        | reverse | .[0:5])
+                  end
                 | join("\n")')"
 
           printf 'tags=%s\n' "$tags" >> "$GITHUB_OUTPUT"
