@@ -1,10 +1,10 @@
 cask "hermes-desktop-linux" do
-  version "0.22.5"
+  version "0.23.1"
   # Self-hosted artifact, built from a clean checkout at the release tag with
   #   python -m scripts.bundles.desktop --tag=vX.Y.Z --variant=light
   # (upstream light desktop variant: no bundled agent runtime; on Linux it is
   # stamped updateMechanism: external, so brew owns updates).
-  sha256 "598f62c95e6954eebfff3bd9ddc6ea02d394c657a90de5b36a4c7aaf69cbcbd9"
+  sha256 "1c4c6b62ba7e54a31cb674db2b0bf3f1edfcdda41bd71184ee69f39dbadf7618"
 
   url "https://github.com/tunix/homebrew-tap/releases/download/hermes-desktop-v#{version}/HermesLight-#{version}-linux-x86_64.AppImage"
   name "Hermes Desktop"
