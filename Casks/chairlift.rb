@@ -1,11 +1,11 @@
 cask "chairlift" do
   arch arm: "arm64", intel: "amd64"
 
-  version "26.11.2"
-  sha256 arm:          "a0a0d79de23075d410af9b4ddbf2e4e5ecd1321c60c8ffd801405332da7c36a5",
-         intel:        "173a0064d8c93faf61404aa75303686a50b83bf5f2eeda677f729ef8655b5556",
-         arm64_linux:  "a0a0d79de23075d410af9b4ddbf2e4e5ecd1321c60c8ffd801405332da7c36a5",
-         x86_64_linux: "173a0064d8c93faf61404aa75303686a50b83bf5f2eeda677f729ef8655b5556"
+  version "26.11.8"
+  sha256 arm:          "1126673ac0d84f03e9a8a18ceca7516f07aa0dc5c58a6bb9a74b55d35caf3ce0",
+         intel:        "f1da330c42459059cdc04fe9368e940502495d81659ef43a3baa6ff620278bf0",
+         arm64_linux:  "1126673ac0d84f03e9a8a18ceca7516f07aa0dc5c58a6bb9a74b55d35caf3ce0",
+         x86_64_linux: "f1da330c42459059cdc04fe9368e940502495d81659ef43a3baa6ff620278bf0"
 
   url "https://github.com/projectbluefin/chairlift/releases/download/v#{version}/chairlift_#{version}_linux_#{arch}.tar.gz"
   name "ChairLift"
